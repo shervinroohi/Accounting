@@ -1,4 +1,4 @@
-using AccountingSystem.Api.Extensions;
+using AccountingSystem.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 

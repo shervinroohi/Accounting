@@ -12,7 +12,7 @@ namespace AccountingSystem.Domain.Entities
 
         public DateTime TransactionDate { get; set; }
 
-
+    
         // Foreign key to Parties table
         public int PartyId { get; set; }
         public Party Party { get; set; }
