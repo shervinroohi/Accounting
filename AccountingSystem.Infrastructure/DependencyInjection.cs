@@ -1,4 +1,6 @@
-﻿using AccountingSystem.Application.Interfaces;
+﻿using AccountingSystem.Application.DTOs.General;
+using AccountingSystem.Application.Interfaces;
+using AccountingSystem.Infrastructure.Authentication;
 using AccountingSystem.Infrastructure.Persistence;
 using AccountingSystem.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -13,11 +15,14 @@ namespace AccountingSystem.Infrastructure
         {
             services.AddDbContext<AccountingDbContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+            services.Configure<JwtSettings>(
+                configuration.GetSection("JwtSettings"));
 
             // Register Repositories
             services.AddScoped<IPartyRepository, PartyRepository>();
             services.AddScoped<ITransactionRepository, TransactionRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<ITokenService, JwtTokenService>();
 
             return services;
         }

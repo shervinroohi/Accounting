@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AccountingSystem.Application.DTOs
+namespace AccountingSystem.Application.DTOs.Login
 {
     public class LoginRequestDto
     {
