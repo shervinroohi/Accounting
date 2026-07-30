@@ -19,6 +19,5 @@ namespace AccountingSystem.Application.Interfaces
 
         void Delete(Transaction transaction);
 
-        Task SaveChangesAsync();
     }
 }

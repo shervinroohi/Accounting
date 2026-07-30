@@ -23,6 +23,7 @@ namespace AccountingSystem.Infrastructure
             services.AddScoped<ITransactionRepository, TransactionRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<ITokenService, JwtTokenService>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             return services;
         }

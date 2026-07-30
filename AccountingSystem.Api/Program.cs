@@ -1,3 +1,4 @@
+using AccountingSystem.Application;
 using AccountingSystem.Application.DTOs.General;
 using AccountingSystem.Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -8,11 +9,13 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
+builder.Services.AddInfrastructureServices(builder.Configuration);
+builder.Services.AddApplicationServices();
+
 var jwtSettings = builder.Configuration
     .GetSection("JwtSettings")
     .Get<JwtSettings>();
 
-builder.Services.AddInfrastructureServices(builder.Configuration);
 builder.Services
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>

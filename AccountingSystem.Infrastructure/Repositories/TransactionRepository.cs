@@ -45,11 +45,6 @@ namespace AccountingSystem.Infrastructure.Repositories
                 .FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        public async Task SaveChangesAsync()
-        {
-            await _context.SaveChangesAsync();
-        }
-
         public void Update(Transaction transaction)
         {
             _context.Transactions.Update(transaction);

@@ -12,6 +12,7 @@ namespace AccountingSystem.Application.Interfaces
         Task AddAsync(User user);
         Task<User?> GetByUserNameAsync(string userName);
         Task<User?> GetByIdAsync(int id);
-        Task SaveChangesAsync();
+
+        Task<bool> UserNameExistsAsync(string userName);
     }
 }

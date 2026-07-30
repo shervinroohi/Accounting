@@ -45,10 +45,6 @@ namespace AccountingSystem.Infrastructure.Repositories
                 .FirstOrDefaultAsync(x => x.Id == id && !x.IsDelete);
         }
 
-        public async Task SaveChangesAsync()
-        {
-            await _context.SaveChangesAsync();
-        }
 
         public void Update(Party party)
         {

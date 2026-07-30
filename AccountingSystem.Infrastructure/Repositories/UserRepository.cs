@@ -22,6 +22,11 @@ namespace AccountingSystem.Infrastructure.Repositories
         {
             await _context.Users.AddAsync(user);
         }
+        public async Task<bool> UserNameExistsAsync(string userName)
+        {
+            return await _context.Users
+                .AnyAsync(u => u.UserName == userName);
+        }
         public async Task<User?> GetByUserNameAsync(string userName)
         {
             return await _context.Users
@@ -31,10 +36,6 @@ namespace AccountingSystem.Infrastructure.Repositories
         {
             return await _context.Users
                 .FirstOrDefaultAsync(x => x.Id == id);
-        }
-        public async Task SaveChangesAsync()
-        {
-            await _context.SaveChangesAsync();
         }
     }
 }

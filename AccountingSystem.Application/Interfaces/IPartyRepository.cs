@@ -18,7 +18,5 @@ namespace AccountingSystem.Application.Interfaces
         void Update(Party party);
 
         void Delete(Party party);
-
-        Task SaveChangesAsync();
     }
 }
