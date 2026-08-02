@@ -1,4 +1,5 @@
-﻿using AccountingSystem.Application.Interfaces;
+﻿using AccountingSystem.Application.Interfaces.Auth;
+using AccountingSystem.Application.Interfaces.Services;
 using AccountingSystem.Application.Services;
 using AccountingSystem.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
@@ -17,14 +18,12 @@ namespace AccountingSystem.Application
         {
 
             services.AddScoped<IAuthService, AuthService>();
-
-
             services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
-
             services.AddScoped<ILoginService, LoginService>();
-
             services.AddScoped<IPartyService, PartyService>();
+            services.AddScoped<ITransactionService, TransactionService>();
 
+            
 
             return services;
         }

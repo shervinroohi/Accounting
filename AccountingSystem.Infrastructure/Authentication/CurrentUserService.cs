@@ -1,4 +1,4 @@
-﻿using AccountingSystem.Application.Interfaces;
+﻿using AccountingSystem.Application.Interfaces.Auth;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;

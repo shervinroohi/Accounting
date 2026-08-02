@@ -12,7 +12,10 @@ namespace AccountingSystem.Domain.Entities
 
         public DateTime TransactionDate { get; set; }
 
-    
+        public bool IsDelete { get; set; } = false;
+
+        public string? Description { get; set; }
+
         // Foreign key to Parties table
         public int PartyId { get; set; }
         public Party Party { get; set; }

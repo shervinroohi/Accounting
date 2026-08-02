@@ -1,4 +1,4 @@
-﻿using AccountingSystem.Application.Interfaces;
+﻿using AccountingSystem.Application.Interfaces.Repositories;
 using AccountingSystem.Domain.Entities;
 using AccountingSystem.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
@@ -31,16 +31,16 @@ namespace AccountingSystem.Infrastructure.Repositories
         }
 
 
-        public async Task<IEnumerable<Transaction>> GetAllAsync()
+        public async Task<IEnumerable<Transaction>> GetAllAsync(int userId)
         {
-            return await _context.Transactions
+            return await _context.Transactions.Where(x=>x.Party.UserId==userId)
                 .Include(x => x.Party)
                 .ToListAsync();
         }
 
-        public async Task<Transaction?> GetByIdAsync(int id)
+        public async Task<Transaction?> GetByIdAsync(int id,int userId)
         {
-            return await _context.Transactions
+            return await _context.Transactions.Where(x=>x.Party.UserId== userId)
                 .Include(x => x.Party)
                 .FirstOrDefaultAsync(x => x.Id == id);
         }

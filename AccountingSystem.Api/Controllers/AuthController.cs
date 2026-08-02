@@ -1,5 +1,5 @@
 ﻿using AccountingSystem.Application.DTOs.Register;
-using AccountingSystem.Application.Interfaces;
+using AccountingSystem.Application.Interfaces.Auth;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AccountingSystem.Api.Controllers

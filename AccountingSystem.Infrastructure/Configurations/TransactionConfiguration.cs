@@ -23,6 +23,13 @@ namespace AccountingSystem.Infrastructure.Persistence.Configurations
             builder.Property(x => x.Status)
                 .HasConversion<byte>()
                 .HasColumnType("tinyint");
+
+            builder.Property(x => x.IsDelete)
+                .HasDefaultValue(false);
+
+            builder.Property(x => x.Description)
+                .HasMaxLength(500)              
+                .IsRequired(false);
         }
     }
 }

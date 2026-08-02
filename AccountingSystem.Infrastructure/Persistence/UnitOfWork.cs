@@ -1,4 +1,4 @@
-﻿using AccountingSystem.Application.Interfaces;
+﻿using AccountingSystem.Application.Interfaces.UOW;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -1,5 +1,5 @@
 ﻿using AccountingSystem.Application.DTOs.Party;
-using AccountingSystem.Application.Interfaces;
+using AccountingSystem.Application.Interfaces.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

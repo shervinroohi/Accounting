@@ -1,5 +1,5 @@
 ﻿using AccountingSystem.Application.DTOs.General;
-using AccountingSystem.Application.Interfaces;
+using AccountingSystem.Application.Interfaces.Auth;
 using AccountingSystem.Domain.Entities;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;

@@ -1,5 +1,7 @@
 ﻿using AccountingSystem.Application.DTOs.Register;
-using AccountingSystem.Application.Interfaces;
+using AccountingSystem.Application.Interfaces.Auth;
+using AccountingSystem.Application.Interfaces.Repositories;
+using AccountingSystem.Application.Interfaces.UOW;
 using AccountingSystem.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 using System;

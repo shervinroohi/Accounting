@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AccountingSystem.Application.Interfaces
+namespace AccountingSystem.Application.Interfaces.Auth
 {
     public interface IAuthService
     {
