@@ -30,19 +30,17 @@ namespace AccountingSystem.Infrastructure.Repositories
             _context.Parties.Update(party);
         }
 
-        public async Task<IEnumerable<Party>> GetAllAsync()
+        public async Task<IEnumerable<Party>> GetAllAsync(int userId)
         {
             return await _context.Parties
-                .Where(x => !x.IsDelete)
-                .Include(x => x.Transactions)
+                .Where(x => !x.IsDelete&&x.UserId==userId)
                 .ToListAsync();
         }
 
-        public async Task<Party?> GetByIdAsync(int id)
+        public async Task<Party?> GetByIdAsync(int id,int userId)
         {
             return await _context.Parties
-                .Include(x => x.Transactions)
-                .FirstOrDefaultAsync(x => x.Id == id && !x.IsDelete);
+                .FirstOrDefaultAsync(x => x.Id == id && x.UserId==userId &&!x.IsDelete);
         }
 
 

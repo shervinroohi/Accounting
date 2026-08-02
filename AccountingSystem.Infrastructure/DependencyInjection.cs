@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
+
 namespace AccountingSystem.Infrastructure
 {
     public static class ServiceCollectionExtensions
@@ -18,12 +19,13 @@ namespace AccountingSystem.Infrastructure
             services.Configure<JwtSettings>(
                 configuration.GetSection("JwtSettings"));
 
-            // Register Repositories
+            services.AddHttpContextAccessor();
             services.AddScoped<IPartyRepository, PartyRepository>();
             services.AddScoped<ITransactionRepository, TransactionRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<ITokenService, JwtTokenService>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<ICurrentUserService, CurrentUserService>();
 
             return services;
         }

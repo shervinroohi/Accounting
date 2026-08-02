@@ -23,6 +23,9 @@ namespace AccountingSystem.Application
 
             services.AddScoped<ILoginService, LoginService>();
 
+            services.AddScoped<IPartyService, PartyService>();
+
+
             return services;
         }
     }

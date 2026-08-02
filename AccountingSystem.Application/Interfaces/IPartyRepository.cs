@@ -9,9 +9,9 @@ namespace AccountingSystem.Application.Interfaces
 {
     public interface IPartyRepository
     {
-        Task<Party?> GetByIdAsync(int id);
+        Task<Party?> GetByIdAsync(int id,int userId);
 
-        Task<IEnumerable<Party>> GetAllAsync();
+        Task<IEnumerable<Party>> GetAllAsync(int userId);
 
         Task AddAsync(Party party);
 
