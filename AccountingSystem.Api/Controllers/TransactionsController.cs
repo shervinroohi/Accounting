@@ -24,4 +24,40 @@ public class TransactionsController:ControllerBase
 
         return Ok();
     }
+
+    [HttpGet]
+    public async Task<IActionResult> GetAll()
+    {
+        var result = await _transactionService.GetAllAsync();
+
+        return Ok(result);
+    }
+
+    [HttpPatch("{id}/status")]
+    public async Task<IActionResult> ChangeStatus(
+    int id,
+    [FromBody] ChangeTransactionStatusRequest request)
+    {
+        await _transactionService.ChangeStatusAsync(id, request);
+
+        return NoContent();
+    }
+
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetById(int id)
+    {
+        var transaction = await _transactionService.GetByIdAsync(id);
+
+        return Ok(transaction);
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete(int id)
+    {
+        await _transactionService.DeleteAsync(id);
+
+        return NoContent();
+    }
+
+
 }

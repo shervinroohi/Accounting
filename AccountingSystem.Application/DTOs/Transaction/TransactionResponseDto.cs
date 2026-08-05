@@ -9,11 +9,14 @@ namespace AccountingSystem.Application.DTOs.Transaction
 {
     public class TransactionResponseDto
     {
+        public int Id { get; set; }
         public decimal Amount { get; set; }
 
         public TransactionType Type { get; set; }
 
         public TransactionStatus Status { get; set; }
+
+        //public string TransactionDate { get; set; } = "";
 
         public DateTime TransactionDate { get; set; }
 

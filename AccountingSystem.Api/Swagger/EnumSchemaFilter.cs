@@ -7,6 +7,10 @@ public class EnumSchemaFilter : ISchemaFilter
 {
     public void Apply(OpenApiSchema schema, SchemaFilterContext context)
     {
+        // اگر این schema داره برای یک query/route parameter ساخته میشه، Example نذار
+        if (context.ParameterInfo != null)
+            return;
+
         if (context.Type == typeof(TransactionType))
         {
             schema.Type = "string";

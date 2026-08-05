@@ -1,4 +1,5 @@
-﻿using AccountingSystem.Domain.Entities;
+﻿using AccountingSystem.Application.DTOs.Transaction;
+using AccountingSystem.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +19,8 @@ namespace AccountingSystem.Application.Interfaces.Repositories
         void Update(Transaction transaction);
 
         void Delete(Transaction transaction);
+
+
 
     }
 }

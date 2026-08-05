@@ -1,12 +1,10 @@
-﻿using AccountingSystem.Application.Interfaces.Repositories;
+﻿using AccountingSystem.Application.DTOs.Transaction;
+using AccountingSystem.Application.Interfaces.Repositories;
 using AccountingSystem.Domain.Entities;
+using AccountingSystem.Domain.Enums;
 using AccountingSystem.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace AccountingSystem.Infrastructure.Repositories
 {
@@ -33,14 +31,14 @@ namespace AccountingSystem.Infrastructure.Repositories
 
         public async Task<IEnumerable<Transaction>> GetAllAsync(int userId)
         {
-            return await _context.Transactions.Where(x=>x.Party.UserId==userId)
+            return await _context.Transactions.Where(x=>x.Party.UserId==userId&& x.IsDelete==false)
                 .Include(x => x.Party)
                 .ToListAsync();
         }
 
         public async Task<Transaction?> GetByIdAsync(int id,int userId)
         {
-            return await _context.Transactions.Where(x=>x.Party.UserId== userId)
+            return await _context.Transactions.Where(x=>x.Party.UserId== userId&& x.IsDelete == false)
                 .Include(x => x.Party)
                 .FirstOrDefaultAsync(x => x.Id == id);
         }
@@ -49,5 +47,9 @@ namespace AccountingSystem.Infrastructure.Repositories
         {
             _context.Transactions.Update(transaction);
         }
+
+
+
+
     }
 }

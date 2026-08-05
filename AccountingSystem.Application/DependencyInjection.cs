@@ -1,4 +1,5 @@
 ﻿using AccountingSystem.Application.Interfaces.Auth;
+using AccountingSystem.Application.Interfaces.Reports;
 using AccountingSystem.Application.Interfaces.Services;
 using AccountingSystem.Application.Services;
 using AccountingSystem.Domain.Entities;
@@ -22,7 +23,7 @@ namespace AccountingSystem.Application
             services.AddScoped<ILoginService, LoginService>();
             services.AddScoped<IPartyService, PartyService>();
             services.AddScoped<ITransactionService, TransactionService>();
-
+            services.AddScoped<ITransactionReportService, ReportService>();
             
 
             return services;

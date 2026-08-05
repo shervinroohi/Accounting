@@ -9,8 +9,16 @@ namespace AccountingSystem.Application.Interfaces.Services
 {
     public interface ITransactionService
     {
-        //Task<IEnumerable<TransactionResponseDto>> GetAllAsync();
+        Task<IEnumerable<TransactionResponseDto>> GetAllAsync();
 
         Task CreateAsync(CreateTransactionRequestDto request);
+
+        Task ChangeStatusAsync(int id, ChangeTransactionStatusRequest request);
+
+        Task<TransactionResponseDto> GetByIdAsync(int id);
+
+        Task DeleteAsync(int id);
+
+
     }
 }

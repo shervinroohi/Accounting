@@ -1,0 +1,110 @@
+﻿using AccountingSystem.Application.DTOs.Transaction;
+using AccountingSystem.Application.Interfaces.Reports;
+using AccountingSystem.Domain.Entities;
+using AccountingSystem.Domain.Enums;
+using AccountingSystem.Infrastructure.Persistence;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace AccountingSystem.Infrastructure.Reports
+{
+    public class TransactionReportRepository : ITransactionReportRepository
+    {
+
+        private readonly AccountingDbContext _context;
+
+        public TransactionReportRepository(AccountingDbContext context)
+        {
+            _context = context;
+        }
+
+        public async Task<IEnumerable<Transaction>> ReportAsync(
+            int userId,
+            TransactionReportFilterDto filter)
+        {
+            IQueryable<Transaction> query = _context.Transactions
+                .AsNoTracking()
+                .Include(x => x.Party)
+                .Where(x =>
+                    !x.IsDelete &&
+                    x.Party.UserId == userId);
+
+            if (filter.Type.HasValue)
+                query = query.Where(x => x.Type == filter.Type.Value);
+
+            if (filter.Status.HasValue)
+                query = query.Where(x => x.Status == filter.Status.Value);
+
+            if (filter.PartyId.HasValue)
+                query = query.Where(x => x.PartyId == filter.PartyId.Value);
+
+            if (filter.FromDate.HasValue)
+            {
+                var fromDate = filter.FromDate.Value.Date;
+                query = query.Where(x => x.TransactionDate >= fromDate);
+            }
+
+            if (filter.ToDate.HasValue)
+            {
+                var toDate = filter.ToDate.Value.Date.AddDays(1);
+                query = query.Where(x => x.TransactionDate < toDate);
+            }
+
+            return await query
+                .OrderByDescending(x => x.TransactionDate)
+                .ToListAsync();
+        }
+
+        public async Task<BalanceReportResponse> GetBalanceAsync(
+            int userId,
+            DateTime? fromDate,
+            DateTime? toDate)
+        {
+            IQueryable<Transaction> query = _context.Transactions
+                .Where(x => !x.IsDelete &&
+                            x.Party.UserId == userId);
+
+            if (fromDate.HasValue)
+                query = query.Where(x => x.TransactionDate >= fromDate.Value);
+
+            if (toDate.HasValue)
+                query = query.Where(x => x.TransactionDate <= toDate.Value);
+
+            var result = await query
+                .GroupBy(x => 1)
+                .Select(g => new
+                {
+                    TotalReceived = g
+                        .Where(x => x.Type == TransactionType.Received)
+                        .Sum(x => (decimal?)x.Amount) ?? 0,
+
+                    TotalPayment = g
+                        .Where(x => x.Type == TransactionType.Payment)
+                        .Sum(x => (decimal?)x.Amount) ?? 0
+                })
+                .FirstOrDefaultAsync();
+
+            var totalReceived = result?.TotalReceived ?? 0;
+            var totalPayment = result?.TotalPayment ?? 0;
+
+            var balance = totalReceived - totalPayment;
+
+            return new BalanceReportResponse
+            {
+                TotalReceived = totalReceived,
+                TotalPayment = totalPayment,
+                Balance = balance,
+                Status = balance switch
+                {
+                    > 0 => BalanceStatus.Creditor,
+                    < 0 => BalanceStatus.Debtor,
+                    _ => BalanceStatus.Balanced
+                }
+            };
+        }
+    }
+}

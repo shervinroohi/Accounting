@@ -1,9 +1,11 @@
 ﻿using AccountingSystem.Application.DTOs.General;
 using AccountingSystem.Application.Interfaces.Auth;
+using AccountingSystem.Application.Interfaces.Reports;
 using AccountingSystem.Application.Interfaces.Repositories;
 using AccountingSystem.Application.Interfaces.UOW;
 using AccountingSystem.Infrastructure.Authentication;
 using AccountingSystem.Infrastructure.Persistence;
+using AccountingSystem.Infrastructure.Reports;
 using AccountingSystem.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -28,6 +30,7 @@ namespace AccountingSystem.Infrastructure
             services.AddScoped<ITokenService, JwtTokenService>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<ICurrentUserService, CurrentUserService>();
+            services.AddScoped<ITransactionReportRepository, TransactionReportRepository>();
 
             return services;
         }

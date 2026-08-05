@@ -13,13 +13,7 @@ namespace AccountingSystem.Application.Mappings
     {
         public static Transaction ToEntity(this CreateTransactionRequestDto request)
         {
-            var persianCalendar = new PersianCalendar();
 
-            var parts = request.TransactionDate.Split('/');
-
-            var year = int.Parse(parts[0]);
-            var month = int.Parse(parts[1]);
-            var day = int.Parse(parts[2]);
 
             return new Transaction
             {
@@ -29,15 +23,26 @@ namespace AccountingSystem.Application.Mappings
                 Description = request.Description,
                 PartyId = request.PartyId,
 
-                TransactionDate = persianCalendar.ToDateTime(
-                    year,
-                    month,
-                    day,
-                    0,
-                    0,
-                    0,
-                    0)
+
+                TransactionDate=request.TransactionDate,
+            };
+        }
+
+        public static TransactionResponseDto ToDto(this Transaction transaction)
+        {
+            return new TransactionResponseDto
+            {
+                Id = transaction.Id,
+                Amount = transaction.Amount,
+                Type = transaction.Type,
+                Status = transaction.Status,
+                TransactionDate = transaction.TransactionDate,
+                Description = transaction.Description,
+                PartyId = transaction.PartyId,
+                PartyName = transaction.Party.Name
             };
         }
     }
+
+
 }
