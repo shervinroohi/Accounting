@@ -1,7 +1,9 @@
 ﻿using AccountingSystem.Application.DTOs.General;
 using AccountingSystem.Application.Interfaces.Auth;
 using AccountingSystem.Application.Interfaces.Reports;
-using AccountingSystem.Application.Interfaces.Repositories;
+using AccountingSystem.Application.Interfaces.Repositories.PatyRespository;
+using AccountingSystem.Application.Interfaces.Repositories.TransactionRepository;
+using AccountingSystem.Application.Interfaces.Repositories.UserRepository;
 using AccountingSystem.Application.Interfaces.UOW;
 using AccountingSystem.Infrastructure.Authentication;
 using AccountingSystem.Infrastructure.Persistence;

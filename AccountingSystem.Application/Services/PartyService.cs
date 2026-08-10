@@ -1,6 +1,6 @@
 ﻿using AccountingSystem.Application.DTOs.Party;
 using AccountingSystem.Application.Interfaces.Auth;
-using AccountingSystem.Application.Interfaces.Repositories;
+using AccountingSystem.Application.Interfaces.Repositories.PatyRespository;
 using AccountingSystem.Application.Interfaces.Services;
 using AccountingSystem.Application.Interfaces.UOW;
 using AccountingSystem.Application.Mappings;

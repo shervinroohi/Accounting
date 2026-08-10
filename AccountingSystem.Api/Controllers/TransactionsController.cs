@@ -18,7 +18,7 @@ public class TransactionsController:ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create(CreateTransactionRequestDto request)
+    public async Task<IActionResult> CreateTransaction(CreateTransactionRequestDto request)
     {
         await _transactionService.CreateAsync(request);
 

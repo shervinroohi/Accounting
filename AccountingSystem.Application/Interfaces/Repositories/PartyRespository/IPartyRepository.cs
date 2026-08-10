@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AccountingSystem.Application.Interfaces.Repositories
+namespace AccountingSystem.Application.Interfaces.Repositories.PatyRespository
 {
     public interface IPartyRepository
     {

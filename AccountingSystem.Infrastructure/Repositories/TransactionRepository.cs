@@ -1,5 +1,5 @@
 ﻿using AccountingSystem.Application.DTOs.Transaction;
-using AccountingSystem.Application.Interfaces.Repositories;
+using AccountingSystem.Application.Interfaces.Repositories.TransactionRepository;
 using AccountingSystem.Domain.Entities;
 using AccountingSystem.Domain.Enums;
 using AccountingSystem.Infrastructure.Persistence;

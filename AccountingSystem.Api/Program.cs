@@ -61,7 +61,7 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
-    options.SchemaFilter<EnumSchemaFilter>();
+    options.OperationFilter<CreateTransactionExampleFilter>();
 
     options.SwaggerDoc("v1", new OpenApiInfo
     {

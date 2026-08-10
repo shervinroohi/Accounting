@@ -1,4 +1,4 @@
-﻿using AccountingSystem.Application.Interfaces.Repositories;
+﻿using AccountingSystem.Application.Interfaces.Repositories.PatyRespository;
 using AccountingSystem.Domain.Entities;
 using AccountingSystem.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;

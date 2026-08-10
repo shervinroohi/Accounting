@@ -1,25 +1,32 @@
-﻿using AccountingSystem.Domain.Enums;
+﻿using AccountingSystem.Application.DTOs.Transaction;
 using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
-public class EnumSchemaFilter : ISchemaFilter
+public class CreateTransactionExampleFilter : IOperationFilter
 {
-    public void Apply(OpenApiSchema schema, SchemaFilterContext context)
+    public void Apply(OpenApiOperation operation, OperationFilterContext context)
     {
-        // اگر این schema داره برای یک query/route parameter ساخته میشه، Example نذار
-        if (context.ParameterInfo != null)
+        if (context.MethodInfo.Name != "CreateTransaction")
             return;
 
-        if (context.Type == typeof(TransactionType))
+        if (operation.RequestBody == null)
+            return;
+
+        if (!operation.RequestBody.Content.TryGetValue("application/json", out var mediaType))
+            return;
+
+        if (mediaType.Example != null)
+            return;
+
+        mediaType.Example = new OpenApiObject
         {
-            schema.Type = "string";
-            schema.Example = new OpenApiString("Payment or Received");
-        }
-        else if (context.Type == typeof(TransactionStatus))
-        {
-            schema.Type = "string";
-            schema.Example = new OpenApiString("Settled or UnSettled");
-        }
+            ["amount"] = new OpenApiInteger(0),
+            ["type"] = new OpenApiString("Payment or Received"),
+            ["status"] = new OpenApiString("Settled or UnSettled"),
+            ["transactionDate"] = new OpenApiString("2026-08-09T07:23:03"),
+            ["description"] = new OpenApiString("string"),
+            ["partyId"] = new OpenApiInteger(0)
+        };
     }
 }

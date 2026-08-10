@@ -1,6 +1,6 @@
 ﻿using AccountingSystem.Application.DTOs.Login;
 using AccountingSystem.Application.Interfaces.Auth;
-using AccountingSystem.Application.Interfaces.Repositories;
+using AccountingSystem.Application.Interfaces.Repositories.UserRepository;
 using AccountingSystem.Application.Interfaces.Services;
 using AccountingSystem.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
