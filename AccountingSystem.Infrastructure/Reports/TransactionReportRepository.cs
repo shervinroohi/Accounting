@@ -18,9 +18,11 @@ namespace AccountingSystem.Infrastructure.Reports
             _context = context;
         }
 
-        public async Task<IEnumerable<Transaction>> ReportAsync(
+        public async Task<(IEnumerable<Transaction> Items, int TotalCount)> ReportAsync(
             int userId,
-            TransactionReportFilterDto filter)
+            TransactionReportFilterDto filter,
+            int? pageNumber,
+            int? pageSize)
         {
             IQueryable<Transaction> query = _context.Transactions
                 .AsNoTracking()
@@ -41,18 +43,33 @@ namespace AccountingSystem.Infrastructure.Reports
             if (filter.FromDate.HasValue)
             {
                 var fromDate = filter.FromDate.Value.Date;
-                query = query.Where(x => x.TransactionDate >= fromDate);
+
+                query = query.Where(x =>
+                    x.TransactionDate >= fromDate);
             }
 
             if (filter.ToDate.HasValue)
             {
                 var toDate = filter.ToDate.Value.Date.AddDays(1);
-                query = query.Where(x => x.TransactionDate < toDate);
+
+                query = query.Where(x =>
+                    x.TransactionDate < toDate);
             }
 
-            return await query
-                .OrderByDescending(x => x.TransactionDate)
-                .ToListAsync();
+            var totalCount = await query.CountAsync();
+
+            query = query.OrderByDescending(x => x.TransactionDate);
+
+            if (pageNumber.HasValue && pageSize.HasValue)
+            {
+                query = query
+                    .Skip((pageNumber.Value - 1) * pageSize.Value)
+                    .Take(pageSize.Value);
+            }
+
+            var items = await query.ToListAsync();
+
+            return (items, totalCount);
         }
 
         public async Task<BalanceReportResponse> GetBalanceAsync(

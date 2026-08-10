@@ -17,10 +17,20 @@ public class PartiesController:ControllerBase
         _partyService = partyService;
     }
 
+    //[HttpGet]
+    //public async Task<IActionResult> GetAll()
+    //{
+    //    return Ok(await _partyService.GetAllAsync());
+    //}
     [HttpGet]
-    public async Task<IActionResult> GetAll()
+    [HttpGet]
+    public async Task<IActionResult> GetAll(
+    int? pageNumber,
+    int? pageSize)
     {
-        return Ok(await _partyService.GetAllAsync());
+        return Ok(await _partyService.GetAllAsync(
+            pageNumber,
+            pageSize));
     }
     [HttpPost]
     public async Task<IActionResult> Create(CreatePartyDto dto)

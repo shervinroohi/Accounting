@@ -19,9 +19,15 @@ namespace AccountingSystem.Api.Controllers
             _transactionReportService = transactionReportService;
         }
         [HttpGet("report")]
-        public async Task<IActionResult> Report([FromQuery] TransactionReportFilterDto filter)
+        public async Task<IActionResult> Report(
+            [FromQuery] TransactionReportFilterDto filter,
+            int? pageNumber,
+            int? pageSize)
         {
-            var result = await _transactionReportService.ReportAsync(filter);
+            var result = await _transactionReportService.ReportAsync(
+                filter,
+                pageNumber,
+                pageSize);
 
             return Ok(result);
         }

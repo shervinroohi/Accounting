@@ -1,4 +1,5 @@
-﻿using AccountingSystem.Application.DTOs.Transaction;
+﻿using AccountingSystem.Application.DTOs.General;
+using AccountingSystem.Application.DTOs.Transaction;
 using AccountingSystem.Application.Interfaces.Auth;
 using AccountingSystem.Application.Interfaces.Repositories.TransactionRepository;
 using AccountingSystem.Application.Interfaces.Services;
@@ -37,13 +38,40 @@ namespace AccountingSystem.Application.Services
             await _unitOfWork.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<TransactionResponseDto>> GetAllAsync()
+        //public async Task<IEnumerable<TransactionResponseDto>> GetAllAsync()
+        //{
+        //    var userId = _currentUserService.UserId;
+
+        //    var transactions = await _transactionRepository.GetAllAsync(userId);
+
+        //    return transactions.Select(x => x.ToDto());
+        //}
+        public async Task<PagedResultDto<TransactionResponseDto>> GetAllAsync(
+            int? pageNumber,
+            int? pageSize)
         {
             var userId = _currentUserService.UserId;
 
-            var transactions = await _transactionRepository.GetAllAsync(userId);
+            var result = await _transactionRepository.GetAllAsync(
+                userId,
+                pageNumber,
+                pageSize);
 
-            return transactions.Select(x => x.ToDto());
+            var items = result.Items
+                .Select(x => x.ToDto())
+                .ToList();
+
+            return new PagedResultDto<TransactionResponseDto>
+            {
+                Items = items,
+                PageNumber = pageNumber ?? 0,
+                PageSize = pageSize ?? 0,
+                TotalCount = result.TotalCount,
+                TotalPages = pageNumber.HasValue && pageSize.HasValue
+                    ? (int)Math.Ceiling(
+                        result.TotalCount / (double)pageSize.Value)
+                    : 1
+            };
         }
 
         public async Task ChangeStatusAsync(int id, ChangeTransactionStatusRequest request)

@@ -11,7 +11,11 @@ namespace AccountingSystem.Application.Interfaces.Repositories.PatyRespository
     {
         Task<Party?> GetByIdAsync(int id,int userId);
 
-        Task<IEnumerable<Party>> GetAllAsync(int userId);
+        //Task<IEnumerable<Party>> GetAllAsync(int userId);
+        Task<(IEnumerable<Party> Items, int TotalCount)> GetAllAsync(
+            int userId,
+            int? pageNumber,
+            int? pageSize);
 
         Task AddAsync(Party party);
 

@@ -10,9 +10,11 @@ namespace AccountingSystem.Application.Interfaces.Reports
 {
     public interface ITransactionReportRepository
     {
-        Task<IEnumerable<Transaction>> ReportAsync(
-        int userId,
-        TransactionReportFilterDto filter);
+        Task<(IEnumerable<Transaction> Items, int TotalCount)> ReportAsync(
+            int userId,
+            TransactionReportFilterDto filter,
+            int? pageNumber,
+            int? pageSize);
 
         Task<BalanceReportResponse> GetBalanceAsync(
         int userId,

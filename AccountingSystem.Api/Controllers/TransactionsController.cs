@@ -25,10 +25,21 @@ public class TransactionsController:ControllerBase
         return Ok();
     }
 
+    //[HttpGet]
+    //public async Task<IActionResult> GetAll()
+    //{
+    //    var result = await _transactionService.GetAllAsync();
+
+    //    return Ok(result);
+    //}
     [HttpGet]
-    public async Task<IActionResult> GetAll()
+    public async Task<IActionResult> GetAll(
+        int? pageNumber,
+        int? pageSize)
     {
-        var result = await _transactionService.GetAllAsync();
+        var result = await _transactionService.GetAllAsync(
+            pageNumber,
+            pageSize);
 
         return Ok(result);
     }

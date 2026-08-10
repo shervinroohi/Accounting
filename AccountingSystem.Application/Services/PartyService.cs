@@ -1,4 +1,5 @@
-﻿using AccountingSystem.Application.DTOs.Party;
+﻿using AccountingSystem.Application.DTOs.General;
+using AccountingSystem.Application.DTOs.Party;
 using AccountingSystem.Application.Interfaces.Auth;
 using AccountingSystem.Application.Interfaces.Repositories.PatyRespository;
 using AccountingSystem.Application.Interfaces.Services;
@@ -23,12 +24,37 @@ namespace AccountingSystem.Application.Services
             _currentUser = currentUser;
             _unitOfWork = unitOfWork;
         }
-        public async Task<IEnumerable<PartyResponseDto>> GetAllAsync()
-        {
-            var parties = await _partyRepository
-                .GetAllAsync(_currentUser.UserId);
+        //public async Task<IEnumerable<PartyResponseDto>> GetAllAsync()
+        //{
+        //    var parties = await _partyRepository
+        //        .GetAllAsync(_currentUser.UserId);
 
-            return parties.Select(x => x.ToResponse());
+        //    return parties.Select(x => x.ToResponse());
+        //}
+        public async Task<PagedResultDto<PartyResponseDto>> GetAllAsync(
+            int? pageNumber,
+            int? pageSize)
+        {
+            var result = await _partyRepository.GetAllAsync(
+                _currentUser.UserId,
+                pageNumber,
+                pageSize);
+
+            var items = result.Items
+                .Select(x => x.ToResponse())
+                .ToList();
+
+            return new PagedResultDto<PartyResponseDto>
+            {
+                Items = items,
+                PageNumber = pageNumber ?? 0,
+                PageSize = pageSize ?? 0,
+                TotalCount = result.TotalCount,
+                TotalPages = pageNumber.HasValue && pageSize.HasValue
+                    ? (int)Math.Ceiling(
+                        result.TotalCount / (double)pageSize.Value)
+                    : 1
+            };
         }
 
         public async Task CreateAsync(CreatePartyDto dto)

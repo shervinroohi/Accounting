@@ -12,7 +12,11 @@ namespace AccountingSystem.Application.Interfaces.Repositories.TransactionReposi
     {
         Task<Transaction?> GetByIdAsync(int id,int userId);
 
-        Task<IEnumerable<Transaction>> GetAllAsync(int userId);
+        //Task<IEnumerable<Transaction>> GetAllAsync(int userId);
+        Task<(IEnumerable<Transaction> Items, int TotalCount)> GetAllAsync(
+            int userId,
+            int? pageNumber,
+            int? pageSize);
 
         Task AddAsync(Transaction transaction);
 

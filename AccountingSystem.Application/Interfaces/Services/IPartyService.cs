@@ -1,4 +1,5 @@
-﻿using AccountingSystem.Application.DTOs.Party;
+﻿using AccountingSystem.Application.DTOs.General;
+using AccountingSystem.Application.DTOs.Party;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,9 @@ namespace AccountingSystem.Application.Interfaces.Services
 {
     public interface IPartyService
     {
-        Task<IEnumerable<PartyResponseDto>> GetAllAsync();
+        Task<PagedResultDto<PartyResponseDto>> GetAllAsync(
+            int? pageNumber,
+            int? pageSize);
 
         Task CreateAsync(CreatePartyDto dto);
 

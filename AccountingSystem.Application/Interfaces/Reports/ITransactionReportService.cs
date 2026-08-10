@@ -1,4 +1,5 @@
-﻿using AccountingSystem.Application.DTOs.Transaction;
+﻿using AccountingSystem.Application.DTOs.General;
+using AccountingSystem.Application.DTOs.Transaction;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,10 @@ namespace AccountingSystem.Application.Interfaces.Reports
 {
     public interface ITransactionReportService
     {
-        Task<IEnumerable<TransactionResponseDto>> ReportAsync(TransactionReportFilterDto filter);
+        Task<PagedResultDto<TransactionResponseDto>> ReportAsync(
+            TransactionReportFilterDto filter,
+            int? pageNumber,
+            int? pageSize);
 
         Task<BalanceReportResponse> GetBalanceAsync(BalanceReportRequest request);
     }

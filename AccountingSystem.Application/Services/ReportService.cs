@@ -1,4 +1,5 @@
-﻿using AccountingSystem.Application.DTOs.Transaction;
+﻿using AccountingSystem.Application.DTOs.General;
+using AccountingSystem.Application.DTOs.Transaction;
 using AccountingSystem.Application.Interfaces.Auth;
 using AccountingSystem.Application.Interfaces.Reports;
 using AccountingSystem.Application.Interfaces.Repositories;
@@ -25,18 +26,34 @@ namespace AccountingSystem.Application.Services
             _transactionReportRepository = transactionReportRepository;
             _currentUserService = currentUserService;
         }
-        public async Task<IEnumerable<TransactionResponseDto>> ReportAsync(
-            TransactionReportFilterDto filter)
+        public async Task<PagedResultDto<TransactionResponseDto>> ReportAsync(
+            TransactionReportFilterDto filter,
+            int? pageNumber,
+            int? pageSize)
         {
             var userId = _currentUserService.UserId;
 
-            var transactions = await _transactionReportRepository.ReportAsync(
+            var result = await _transactionReportRepository.ReportAsync(
                 userId,
-                filter);
+                filter,
+                pageNumber,
+                pageSize);
 
-            return transactions
+            var items = result.Items
                 .Select(x => x.ToDto())
                 .ToList();
+
+            return new PagedResultDto<TransactionResponseDto>
+            {
+                Items = items,
+                PageNumber = pageNumber ?? 0,
+                PageSize = pageSize ?? 0,
+                TotalCount = result.TotalCount,
+                TotalPages = pageNumber.HasValue && pageSize.HasValue
+                    ? (int)Math.Ceiling(
+                        result.TotalCount / (double)pageSize.Value)
+                    : 1
+            };
         }
 
         public async Task<BalanceReportResponse> GetBalanceAsync(BalanceReportRequest request)

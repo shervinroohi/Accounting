@@ -29,11 +29,27 @@ namespace AccountingSystem.Infrastructure.Repositories
         }
 
 
-        public async Task<IEnumerable<Transaction>> GetAllAsync(int userId)
+        public async Task<(IEnumerable<Transaction> Items, int TotalCount)> GetAllAsync(
+            int userId,
+            int? pageNumber,
+            int? pageSize)
         {
-            return await _context.Transactions.Where(x=>x.Party.UserId==userId&& x.IsDelete==false)
-                .Include(x => x.Party)
-                .ToListAsync();
+            IQueryable<Transaction> query = _context.Transactions
+                .Where(x => x.Party.UserId == userId && !x.IsDelete)
+                .Include(x => x.Party);
+
+            var totalCount = await query.CountAsync();
+
+            if (pageNumber.HasValue && pageSize.HasValue)
+            {
+                query = query
+                    .Skip((pageNumber.Value - 1) * pageSize.Value)
+                    .Take(pageSize.Value);
+            }
+
+            var items = await query.ToListAsync();
+
+            return (items, totalCount);
         }
 
         public async Task<Transaction?> GetByIdAsync(int id,int userId)

@@ -24,7 +24,7 @@ public class CreateTransactionExampleFilter : IOperationFilter
             ["amount"] = new OpenApiInteger(0),
             ["type"] = new OpenApiString("Payment or Received"),
             ["status"] = new OpenApiString("Settled or UnSettled"),
-            ["transactionDate"] = new OpenApiString("2026-08-09T07:23:03"),
+            ["transactionDate"] = new OpenApiString("2024-08-08T12:12:12"),
             ["description"] = new OpenApiString("string"),
             ["partyId"] = new OpenApiInteger(0)
         };

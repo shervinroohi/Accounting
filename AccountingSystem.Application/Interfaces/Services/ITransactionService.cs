@@ -1,4 +1,5 @@
-﻿using AccountingSystem.Application.DTOs.Transaction;
+﻿using AccountingSystem.Application.DTOs.General;
+using AccountingSystem.Application.DTOs.Transaction;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,10 @@ namespace AccountingSystem.Application.Interfaces.Services
 {
     public interface ITransactionService
     {
-        Task<IEnumerable<TransactionResponseDto>> GetAllAsync();
+        //Task<IEnumerable<TransactionResponseDto>> GetAllAsync();
+        Task<PagedResultDto<TransactionResponseDto>> GetAllAsync(
+            int? pageNumber,
+            int? pageSize);
 
         Task CreateAsync(CreateTransactionRequestDto request);
 
