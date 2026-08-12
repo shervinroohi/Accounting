@@ -1,5 +1,6 @@
 ﻿using AccountingSystem.Application.DTOs.General;
 using AccountingSystem.Application.DTOs.Party;
+using AccountingSystem.Application.Exceptions;
 using AccountingSystem.Application.Interfaces.Auth;
 using AccountingSystem.Application.Interfaces.Repositories.PatyRespository;
 using AccountingSystem.Application.Interfaces.Services;
@@ -24,13 +25,7 @@ namespace AccountingSystem.Application.Services
             _currentUser = currentUser;
             _unitOfWork = unitOfWork;
         }
-        //public async Task<IEnumerable<PartyResponseDto>> GetAllAsync()
-        //{
-        //    var parties = await _partyRepository
-        //        .GetAllAsync(_currentUser.UserId);
 
-        //    return parties.Select(x => x.ToResponse());
-        //}
         public async Task<PagedResultDto<PartyResponseDto>> GetAllAsync(
             int? pageNumber,
             int? pageSize)
@@ -57,7 +52,7 @@ namespace AccountingSystem.Application.Services
             };
         }
 
-        public async Task CreateAsync(CreatePartyDto dto)
+        public async Task<int> CreateAsync(CreatePartyDto dto)
         {
             var party = dto.ToEntity();
             party.UserId = _currentUser.UserId;
@@ -65,6 +60,8 @@ namespace AccountingSystem.Application.Services
             await _partyRepository.AddAsync(party);
 
             await _unitOfWork.SaveChangesAsync();
+
+            return party.Id;
         }
 
         public async Task<PartyResponseDto?> GetByIdAsync(int id)
@@ -73,7 +70,7 @@ namespace AccountingSystem.Application.Services
                 .GetByIdAsync(id, _currentUser.UserId);
 
             if (party == null)
-                return null;
+                throw new NotFoundException("No Party with this ID was found.");
 
             return party.ToResponse();
         }
@@ -84,7 +81,7 @@ namespace AccountingSystem.Application.Services
                 .GetByIdAsync(id, _currentUser.UserId);
 
             if (party == null)
-                throw new Exception("Party not found.");
+                throw new NotFoundException("No Party with this ID was found.");
 
             party.Name = dto.Name;
             party.PhoneNumber = dto.PhoneNumber;
@@ -100,7 +97,7 @@ namespace AccountingSystem.Application.Services
                 .GetByIdAsync(id, _currentUser.UserId);
 
             if (party == null)
-                throw new Exception("Party not found.");
+                throw new NotFoundException("No Party with this ID was found.");
 
             _partyRepository.Delete(party);
 

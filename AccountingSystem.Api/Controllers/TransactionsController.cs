@@ -17,21 +17,19 @@ public class TransactionsController:ControllerBase
         _transactionService = transactionService;
     }
 
+
     [HttpPost]
     public async Task<IActionResult> CreateTransaction(CreateTransactionRequestDto request)
     {
-        await _transactionService.CreateAsync(request);
+        var transactionId = await _transactionService.CreateAsync(request);
 
-        return Ok();
+        return StatusCode(StatusCodes.Status201Created, new
+        {
+            id = transactionId
+        });
     }
 
-    //[HttpGet]
-    //public async Task<IActionResult> GetAll()
-    //{
-    //    var result = await _transactionService.GetAllAsync();
 
-    //    return Ok(result);
-    //}
     [HttpGet]
     public async Task<IActionResult> GetAll(
         int? pageNumber,
@@ -47,7 +45,7 @@ public class TransactionsController:ControllerBase
     [HttpPatch("{id}/status")]
     public async Task<IActionResult> ChangeStatus(
     int id,
-    [FromBody] ChangeTransactionStatusRequest request)
+    [FromBody] ChangeTransactionStatusRequestDto request)
     {
         await _transactionService.ChangeStatusAsync(id, request);
 

@@ -1,4 +1,5 @@
 ﻿using AccountingSystem.Application.DTOs.General;
+using AccountingSystem.Application.DTOs.Report;
 using AccountingSystem.Application.DTOs.Transaction;
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,6 @@ namespace AccountingSystem.Application.Interfaces.Reports
             int? pageNumber,
             int? pageSize);
 
-        Task<BalanceReportResponse> GetBalanceAsync(BalanceReportRequest request);
+        Task<BalanceReportResponseDto> GetBalanceAsync(BalanceReportRequestDto request);
     }
 }

@@ -14,7 +14,7 @@ namespace AccountingSystem.Application.Interfaces.Services
             int? pageNumber,
             int? pageSize);
 
-        Task CreateAsync(CreatePartyDto dto);
+        Task<int> CreateAsync(CreatePartyDto dto);
 
         Task<PartyResponseDto?> GetByIdAsync(int id);
 

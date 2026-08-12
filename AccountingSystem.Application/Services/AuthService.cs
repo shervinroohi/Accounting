@@ -1,4 +1,5 @@
 ﻿using AccountingSystem.Application.DTOs.Register;
+using AccountingSystem.Application.Exceptions;
 using AccountingSystem.Application.Interfaces.Auth;
 using AccountingSystem.Application.Interfaces.Repositories.UserRepository;
 using AccountingSystem.Application.Interfaces.UOW;
@@ -33,10 +34,7 @@ namespace AccountingSystem.Application.Services
 
             if (await _userRepository.UserNameExistsAsync(request.UserName))
             {
-                return new RegisterResponseDto
-                {
-                    Message = "This username is already taken."
-                };
+               throw new ConflictException("Username already exists.");
             }
 
             var user = new User

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace AccountingSystem.Application.DTOs.Transaction
 {
-    public class ChangeTransactionStatusRequest
+    public class ChangeTransactionStatusRequestDto
     {
         public TransactionStatus Status { get; set; }
     }

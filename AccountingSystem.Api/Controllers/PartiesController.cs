@@ -17,12 +17,6 @@ public class PartiesController:ControllerBase
         _partyService = partyService;
     }
 
-    //[HttpGet]
-    //public async Task<IActionResult> GetAll()
-    //{
-    //    return Ok(await _partyService.GetAllAsync());
-    //}
-    [HttpGet]
     [HttpGet]
     public async Task<IActionResult> GetAll(
     int? pageNumber,
@@ -35,18 +29,18 @@ public class PartiesController:ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create(CreatePartyDto dto)
     {
-        await _partyService.CreateAsync(dto);
+        var partyId = await _partyService.CreateAsync(dto);
 
-        return Ok();
+        return StatusCode(StatusCodes.Status201Created, new
+        {
+            id = partyId
+        });
     }
 
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(int id)
     {
         var result = await _partyService.GetByIdAsync(id);
-
-        if (result == null)
-            return NotFound();
 
         return Ok(result);
     }

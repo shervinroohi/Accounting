@@ -1,5 +1,6 @@
 ﻿using AccountingSystem.Application.DTOs.General;
 using AccountingSystem.Application.DTOs.Transaction;
+using AccountingSystem.Application.Exceptions;
 using AccountingSystem.Application.Interfaces.Auth;
 using AccountingSystem.Application.Interfaces.Repositories.TransactionRepository;
 using AccountingSystem.Application.Interfaces.Services;
@@ -29,23 +30,18 @@ namespace AccountingSystem.Application.Services
             _currentUserService = currentUserService;
         }
 
-        public async Task CreateAsync(CreateTransactionRequestDto request)
+        public async Task<int> CreateAsync(CreateTransactionRequestDto request)
         {
             var transaction = request.ToEntity();
 
             await _transactionRepository.AddAsync(transaction);
 
             await _unitOfWork.SaveChangesAsync();
+
+            return transaction.Id;
         }
 
-        //public async Task<IEnumerable<TransactionResponseDto>> GetAllAsync()
-        //{
-        //    var userId = _currentUserService.UserId;
 
-        //    var transactions = await _transactionRepository.GetAllAsync(userId);
-
-        //    return transactions.Select(x => x.ToDto());
-        //}
         public async Task<PagedResultDto<TransactionResponseDto>> GetAllAsync(
             int? pageNumber,
             int? pageSize)
@@ -74,14 +70,14 @@ namespace AccountingSystem.Application.Services
             };
         }
 
-        public async Task ChangeStatusAsync(int id, ChangeTransactionStatusRequest request)
+        public async Task ChangeStatusAsync(int id, ChangeTransactionStatusRequestDto request)
         {
             var userId = _currentUserService.UserId;
 
             var transaction = await _transactionRepository.GetByIdAsync(id, userId);
 
             if (transaction is null)
-                throw new Exception("Transaction not found.");
+                throw new NotFoundException("Transaction not found.");
 
             transaction.Status = request.Status;
 
@@ -97,7 +93,7 @@ namespace AccountingSystem.Application.Services
             var transaction = await _transactionRepository.GetByIdAsync(id, userId);
 
             if (transaction is null)
-                throw new Exception("Transaction not found.");
+                throw new NotFoundException("Transaction not found.");
 
             transaction.IsDelete = true;
 
@@ -113,7 +109,7 @@ namespace AccountingSystem.Application.Services
             var transaction = await _transactionRepository.GetByIdAsync(id, userId);
 
             if (transaction is null)
-                throw new Exception("Transaction not found.");
+                throw new NotFoundException("Transaction not found.");
 
             return transaction.ToDto();
         }

@@ -1,4 +1,4 @@
-﻿using AccountingSystem.Application.DTOs.Transaction;
+﻿using AccountingSystem.Application.DTOs.Report;
 using AccountingSystem.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -16,7 +16,7 @@ namespace AccountingSystem.Application.Interfaces.Reports
             int? pageNumber,
             int? pageSize);
 
-        Task<BalanceReportResponse> GetBalanceAsync(
+        Task<BalanceReportResponseDto> GetBalanceAsync(
         int userId,
         DateTime? fromDate,
         DateTime? toDate);

@@ -1,4 +1,4 @@
-﻿using AccountingSystem.Application.DTOs.Transaction;
+﻿using AccountingSystem.Application.DTOs.Report;
 using AccountingSystem.Application.Interfaces.Reports;
 using AccountingSystem.Domain.Entities;
 using AccountingSystem.Domain.Enums;
@@ -72,7 +72,7 @@ namespace AccountingSystem.Infrastructure.Reports
             return (items, totalCount);
         }
 
-        public async Task<BalanceReportResponse> GetBalanceAsync(
+        public async Task<BalanceReportResponseDto> GetBalanceAsync(
             int userId,
             DateTime? fromDate,
             DateTime? toDate)
@@ -106,7 +106,7 @@ namespace AccountingSystem.Infrastructure.Reports
 
             var balance = totalReceived - totalPayment;
 
-            return new BalanceReportResponse
+            return new BalanceReportResponseDto
             {
                 TotalReceived = totalReceived,
                 TotalPayment = totalPayment,

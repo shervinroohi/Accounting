@@ -1,4 +1,5 @@
 ﻿using AccountingSystem.Application.DTOs.Login;
+using AccountingSystem.Application.Exceptions;
 using AccountingSystem.Application.Interfaces.Auth;
 using AccountingSystem.Application.Interfaces.Repositories.UserRepository;
 using AccountingSystem.Application.Interfaces.Services;
@@ -34,13 +35,13 @@ namespace AccountingSystem.Application.Services
             var user = await _userRepository.GetByUserNameAsync(dto.UserName);
 
             if (user == null)
-                throw new Exception("Username or password is incorrect.");
+                throw new NotFoundException("User not found.");
 
             var verificationResult = _passwordHasher.VerifyHashedPassword(user, user.PasswordHash, dto.Password);
 
   
             if (verificationResult == PasswordVerificationResult.Failed)
-                throw new Exception("Username or password is incorrect.");
+                throw new NotFoundException("Username or password is incorrect.");
 
             var token = _tokenService.GenerateToken(user);
 

@@ -10,14 +10,14 @@ namespace AccountingSystem.Application.Interfaces.Services
 {
     public interface ITransactionService
     {
-        //Task<IEnumerable<TransactionResponseDto>> GetAllAsync();
+
         Task<PagedResultDto<TransactionResponseDto>> GetAllAsync(
             int? pageNumber,
             int? pageSize);
 
-        Task CreateAsync(CreateTransactionRequestDto request);
+        Task<int> CreateAsync(CreateTransactionRequestDto request);
 
-        Task ChangeStatusAsync(int id, ChangeTransactionStatusRequest request);
+        Task ChangeStatusAsync(int id, ChangeTransactionStatusRequestDto request);
 
         Task<TransactionResponseDto> GetByIdAsync(int id);
 

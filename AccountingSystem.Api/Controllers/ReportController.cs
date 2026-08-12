@@ -1,4 +1,4 @@
-﻿using AccountingSystem.Application.DTOs.Transaction;
+﻿using AccountingSystem.Application.DTOs.Report;
 using AccountingSystem.Application.Interfaces.Reports;
 using AccountingSystem.Application.Interfaces.Services;
 using AccountingSystem.Application.Services;
@@ -32,7 +32,7 @@ namespace AccountingSystem.Api.Controllers
             return Ok(result);
         }
         [HttpGet("balance")]
-        public async Task<IActionResult> GetBalance([FromQuery] BalanceReportRequest request)
+        public async Task<IActionResult> GetBalance([FromQuery] BalanceReportRequestDto request)
         {
             var result = await _transactionReportService.GetBalanceAsync(request);
 

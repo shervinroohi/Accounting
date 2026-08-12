@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AccountingSystem.Application.DTOs.Transaction
+namespace AccountingSystem.Application.DTOs.Report
 {
-    public class BalanceReportResponse
+    public class BalanceReportResponseDto
     {
         public decimal TotalReceived { get; set; }
 

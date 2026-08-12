@@ -1,10 +1,11 @@
+using AccountingSystem.Api.Middlewares;
 using AccountingSystem.Application;
 using AccountingSystem.Application.DTOs.General;
 using AccountingSystem.Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using System.Text;
 using Microsoft.OpenApi.Models;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -36,11 +37,57 @@ builder.Services
         };
         options.Events = new JwtBearerEvents
         {
-            OnAuthenticationFailed = context =>
+            OnMessageReceived = context =>
             {
-                var message = context.Exception.Message;
+                var authorizationHeader =
+                    context.Request.Headers.Authorization.FirstOrDefault();
+
+
+                if (!string.IsNullOrWhiteSpace(authorizationHeader) &&
+                    authorizationHeader.StartsWith("Bearer", StringComparison.OrdinalIgnoreCase))
+                {
+                    var token = authorizationHeader["Bearer".Length..].Trim();
+
+                    if (string.IsNullOrWhiteSpace(token))
+                    {
+                        context.HttpContext.Items["JwtError"] =
+                            "Token is missing.";
+
+                        context.NoResult();
+                    }
+                }
 
                 return Task.CompletedTask;
+            },
+
+            OnAuthenticationFailed = async context =>
+            {
+                context.NoResult();
+
+                context.HttpContext.Items["JwtError"] =
+                    "Invalid or expired token.";
+
+                await Task.CompletedTask;
+            },
+
+            OnChallenge = async context =>
+            {
+                context.HandleResponse();
+
+                context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                context.Response.ContentType = "application/json";
+
+                var message =
+                    context.HttpContext.Items["JwtError"]?.ToString()
+                    ?? "User is not authenticated.";
+
+                var response = new
+                {
+                    statusCode = 401,
+                    message
+                };
+
+                await context.Response.WriteAsJsonAsync(response);
             },
 
             OnTokenValidated = context =>
@@ -96,6 +143,8 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 var app = builder.Build();
+
+app.UseMiddleware<GlobalExceptionMiddleware>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

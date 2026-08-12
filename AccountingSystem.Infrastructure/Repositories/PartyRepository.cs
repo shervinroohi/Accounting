@@ -26,12 +26,6 @@ namespace AccountingSystem.Infrastructure.Repositories
             _context.Parties.Update(party);
         }
 
-        //public async Task<IEnumerable<Party>> GetAllAsync(int userId)
-        //{
-        //    return await _context.Parties
-        //        .Where(x => !x.IsDelete&&x.UserId==userId)
-        //        .ToListAsync();
-        //}
         public async Task<(IEnumerable<Party> Items, int TotalCount)> GetAllAsync(
             int userId,
             int? pageNumber,

@@ -1,4 +1,5 @@
 ﻿using AccountingSystem.Application.DTOs.General;
+using AccountingSystem.Application.DTOs.Report;
 using AccountingSystem.Application.DTOs.Transaction;
 using AccountingSystem.Application.Interfaces.Auth;
 using AccountingSystem.Application.Interfaces.Reports;
@@ -56,7 +57,7 @@ namespace AccountingSystem.Application.Services
             };
         }
 
-        public async Task<BalanceReportResponse> GetBalanceAsync(BalanceReportRequest request)
+        public async Task<BalanceReportResponseDto> GetBalanceAsync(BalanceReportRequestDto request)
         {
             var userId = _currentUserService.UserId;
 

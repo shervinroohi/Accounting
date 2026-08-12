@@ -20,13 +20,6 @@ namespace AccountingSystem.Api.Controllers
         {
             var result = await _authService.RegisterAsync(request);
 
-
-            if (result.Message.Contains("already"))
-            {
-                return Conflict(result); // 409
-            }
-
-
             return StatusCode(StatusCodes.Status201Created, result);
         }
     }
