@@ -2,7 +2,9 @@
 using AccountingSystem.Application.Interfaces.Reports;
 using AccountingSystem.Application.Interfaces.Services;
 using AccountingSystem.Application.Services;
+using AccountingSystem.Application.Validators.Transaction;
 using AccountingSystem.Domain.Entities;
+using FluentValidation;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -24,7 +26,8 @@ namespace AccountingSystem.Application
             services.AddScoped<IPartyService, PartyService>();
             services.AddScoped<ITransactionService, TransactionService>();
             services.AddScoped<ITransactionReportService, ReportService>();
-            
+            services.AddValidatorsFromAssemblyContaining<CreateTransactionValidator>();
+            services.AddScoped<IValidationService, ValidationService>();
 
             return services;
         }

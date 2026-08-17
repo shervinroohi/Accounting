@@ -2,6 +2,7 @@
 using AccountingSystem.Application.DTOs.Transaction;
 using AccountingSystem.Application.Exceptions;
 using AccountingSystem.Application.Interfaces.Auth;
+using AccountingSystem.Application.Interfaces.Repositories.PatyRespository;
 using AccountingSystem.Application.Interfaces.Repositories.TransactionRepository;
 using AccountingSystem.Application.Interfaces.Services;
 using AccountingSystem.Application.Interfaces.UOW;
@@ -19,19 +20,37 @@ namespace AccountingSystem.Application.Services
         private readonly ITransactionRepository _transactionRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly ICurrentUserService _currentUserService;
+        private readonly IPartyRepository _partyRepository;
+        private readonly IValidationService _validationService;
 
         public TransactionService(
             ITransactionRepository transactionRepository,
             IUnitOfWork unitOfWork,
-            ICurrentUserService currentUserService)
+            ICurrentUserService currentUserService,
+            IPartyRepository partyRepository,
+            IValidationService validationService)
         {
             _transactionRepository = transactionRepository;
             _unitOfWork = unitOfWork;
             _currentUserService = currentUserService;
+            _partyRepository = partyRepository;
+            _validationService = validationService;
         }
+
 
         public async Task<int> CreateAsync(CreateTransactionRequestDto request)
         {
+            await _validationService.ValidateAsync(request);
+
+            var userId = _currentUserService.UserId;
+
+            var party = await _partyRepository.GetByIdForUserAsync(
+                request.PartyId,
+                userId);
+
+            if (party is null)
+                throw new NotFoundException("Party not found.");
+
             var transaction = request.ToEntity();
 
             await _transactionRepository.AddAsync(transaction);
@@ -69,7 +88,7 @@ namespace AccountingSystem.Application.Services
                     : 1
             };
         }
-
+       
         public async Task ChangeStatusAsync(int id, ChangeTransactionStatusRequestDto request)
         {
             var userId = _currentUserService.UserId;

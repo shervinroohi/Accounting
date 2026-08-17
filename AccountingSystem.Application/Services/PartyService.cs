@@ -15,25 +15,29 @@ namespace AccountingSystem.Application.Services
         private readonly IPartyRepository _partyRepository;
         private readonly ICurrentUserService _currentUser;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IValidationService _validationService;
 
         public PartyService(
         IPartyRepository partyRepository,
         ICurrentUserService currentUser,
-        IUnitOfWork unitOfWork)
+        IUnitOfWork unitOfWork,
+        IValidationService validationService)
         {
             _partyRepository = partyRepository;
             _currentUser = currentUser;
             _unitOfWork = unitOfWork;
+            _validationService = validationService;
         }
 
         public async Task<PagedResultDto<PartyResponseDto>> GetAllAsync(
-            int? pageNumber,
-            int? pageSize)
+            PaginationRequestDto pagination)
         {
+            await _validationService.ValidateAsync(pagination);
+
             var result = await _partyRepository.GetAllAsync(
                 _currentUser.UserId,
-                pageNumber,
-                pageSize);
+                pagination.PageNumber,
+                pagination.PageSize);
 
             var items = result.Items
                 .Select(x => x.ToResponse())
@@ -42,18 +46,20 @@ namespace AccountingSystem.Application.Services
             return new PagedResultDto<PartyResponseDto>
             {
                 Items = items,
-                PageNumber = pageNumber ?? 0,
-                PageSize = pageSize ?? 0,
+                PageNumber = pagination.PageNumber ?? 0,
+                PageSize = pagination.PageSize ?? 0,
                 TotalCount = result.TotalCount,
-                TotalPages = pageNumber.HasValue && pageSize.HasValue
+                TotalPages = pagination.PageNumber.HasValue && pagination.PageSize.HasValue
                     ? (int)Math.Ceiling(
-                        result.TotalCount / (double)pageSize.Value)
+                        result.TotalCount / (double)pagination.PageSize.Value)
                     : 1
             };
         }
 
         public async Task<int> CreateAsync(CreatePartyDto dto)
         {
+            await _validationService.ValidateAsync(dto);
+
             var party = dto.ToEntity();
             party.UserId = _currentUser.UserId;
 
@@ -77,6 +83,8 @@ namespace AccountingSystem.Application.Services
 
         public async Task UpdateAsync(int id, UpdatePartyDto dto)
         {
+            await _validationService.ValidateAsync(dto);
+
             var party = await _partyRepository
                 .GetByIdAsync(id, _currentUser.UserId);
 

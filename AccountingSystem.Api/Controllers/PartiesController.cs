@@ -1,4 +1,5 @@
-﻿using AccountingSystem.Application.DTOs.Party;
+﻿using AccountingSystem.Application.DTOs.General;
+using AccountingSystem.Application.DTOs.Party;
 using AccountingSystem.Application.Interfaces.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -19,12 +20,10 @@ public class PartiesController:ControllerBase
 
     [HttpGet]
     public async Task<IActionResult> GetAll(
-    int? pageNumber,
-    int? pageSize)
+    [FromQuery] PaginationRequestDto request)
     {
         return Ok(await _partyService.GetAllAsync(
-            pageNumber,
-            pageSize));
+            request));
     }
     [HttpPost]
     public async Task<IActionResult> Create(CreatePartyDto dto)

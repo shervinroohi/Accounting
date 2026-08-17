@@ -13,8 +13,7 @@ namespace AccountingSystem.Application.Interfaces.Reports
     {
         Task<PagedResultDto<TransactionResponseDto>> ReportAsync(
             TransactionReportFilterDto filter,
-            int? pageNumber,
-            int? pageSize);
+            PaginationRequestDto pagination);
 
         Task<BalanceReportResponseDto> GetBalanceAsync(BalanceReportRequestDto request);
     }

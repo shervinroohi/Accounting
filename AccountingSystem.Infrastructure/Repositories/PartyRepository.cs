@@ -54,7 +54,16 @@ namespace AccountingSystem.Infrastructure.Repositories
                 .FirstOrDefaultAsync(x => x.Id == id && x.UserId==userId &&!x.IsDelete);
         }
 
-
+        public async Task<Party?> GetByIdForUserAsync(
+        int partyId,
+        int userId)
+        {
+            return await _context.Parties
+                .FirstOrDefaultAsync(x =>
+                    x.Id == partyId &&
+                    x.UserId == userId &&
+                    !x.IsDelete);
+        }
         public void Update(Party party)
         {
             _context.Parties.Update(party);

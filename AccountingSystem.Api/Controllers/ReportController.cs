@@ -1,4 +1,5 @@
-﻿using AccountingSystem.Application.DTOs.Report;
+﻿using AccountingSystem.Application.DTOs.General;
+using AccountingSystem.Application.DTOs.Report;
 using AccountingSystem.Application.Interfaces.Reports;
 using AccountingSystem.Application.Interfaces.Services;
 using AccountingSystem.Application.Services;
@@ -21,13 +22,11 @@ namespace AccountingSystem.Api.Controllers
         [HttpGet("report")]
         public async Task<IActionResult> Report(
             [FromQuery] TransactionReportFilterDto filter,
-            int? pageNumber,
-            int? pageSize)
+            [FromQuery] PaginationRequestDto pagination)
         {
             var result = await _transactionReportService.ReportAsync(
                 filter,
-                pageNumber,
-                pageSize);
+                pagination);
 
             return Ok(result);
         }

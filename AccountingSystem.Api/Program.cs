@@ -1,8 +1,10 @@
 using AccountingSystem.Api.Middlewares;
 using AccountingSystem.Application;
 using AccountingSystem.Application.DTOs.General;
+using AccountingSystem.Application.Validators.Transaction;
 using AccountingSystem.Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
@@ -10,6 +12,32 @@ using System.Text;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+static string NormalizeKey(string key)
+{
+    if (key.StartsWith("$."))
+        return key[2..];
+
+    return key;
+}
+
+static string GetModelStateErrorMessage(
+    string key,
+    Exception? exception,
+    string? errorMessage)
+{
+    key = NormalizeKey(key);
+
+    if (key.Equals("type", StringComparison.OrdinalIgnoreCase))
+        return "Type must be either Payment or Received.";
+
+    if (key.Equals("status", StringComparison.OrdinalIgnoreCase))
+        return "Status must be either Settled or UnSettled.";
+
+    if (!string.IsNullOrWhiteSpace(errorMessage))
+        return errorMessage;
+
+    return "The provided value is invalid.";
+}
 
 builder.Services.AddInfrastructureServices(builder.Configuration);
 builder.Services.AddApplicationServices();
@@ -99,11 +127,53 @@ builder.Services
 
 builder.Services.AddAuthorization();
 
-builder.Services.AddControllers().AddJsonOptions(options =>
+
+
+//builder.Services.AddControllers()
+//.AddJsonOptions(options =>
+//{
+//    options.JsonSerializerOptions.Converters.Add(
+//        new System.Text.Json.Serialization.JsonStringEnumConverter());
+//});
+//;
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(
+            new System.Text.Json.Serialization.JsonStringEnumConverter());
+    });
+
+builder.Services.Configure<ApiBehaviorOptions>(options =>
 {
-    options.JsonSerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
+    options.InvalidModelStateResponseFactory = context =>
+    {
+        var errors = context.ModelState
+            .Where(x =>
+                x.Value?.Errors.Count > 0 &&
+                !string.Equals(
+                    x.Key,
+                    "request",
+                    StringComparison.OrdinalIgnoreCase))
+            .ToDictionary(
+                x => NormalizeKey(x.Key),
+                x => x.Value!.Errors
+                    .Select(error =>
+                        GetModelStateErrorMessage(
+                            x.Key,
+                            error.Exception,
+                            error.ErrorMessage))
+                    .ToArray());
+
+        var response = new ErrorResponseDto
+        {
+            StatusCode = StatusCodes.Status400BadRequest,
+            Message = "One or more validation errors occurred.",
+            Errors = errors
+        };
+
+        return new BadRequestObjectResult(response);
+    };
 });
-;
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>

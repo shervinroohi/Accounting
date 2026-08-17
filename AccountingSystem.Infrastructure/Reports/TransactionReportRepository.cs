@@ -18,11 +18,16 @@ namespace AccountingSystem.Infrastructure.Reports
             _context = context;
         }
 
+        //public async Task<(IEnumerable<Transaction> Items, int TotalCount)> ReportAsync(
+        //    int userId,
+        //    TransactionReportFilterDto filter,
+        //    int? pageNumber,
+        //    int? pageSize)
         public async Task<(IEnumerable<Transaction> Items, int TotalCount)> ReportAsync(
-            int userId,
-            TransactionReportFilterDto filter,
-            int? pageNumber,
-            int? pageSize)
+    int userId,
+    TransactionReportQueryDto filter,
+    int? pageNumber,
+    int? pageSize)
         {
             IQueryable<Transaction> query = _context.Transactions
                 .AsNoTracking()

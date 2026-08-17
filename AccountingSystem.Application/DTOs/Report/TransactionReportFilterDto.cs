@@ -7,15 +7,27 @@ using System.Threading.Tasks;
 
 namespace AccountingSystem.Application.DTOs.Report
 {
+    //public class TransactionReportFilterDto
+    //{
+    //    public TransactionType? Type { get; set; }
+
+    //    public TransactionStatus? Status { get; set; }
+
+    //    public DateTime? FromDate { get; set; }
+
+    //    public DateTime? ToDate { get; set; }
+
+    //    public int? PartyId { get; set; }
+    //}
     public class TransactionReportFilterDto
     {
         public TransactionType? Type { get; set; }
 
         public TransactionStatus? Status { get; set; }
 
-        public DateTime? FromDate { get; set; }
+        public string? FromDate { get; set; }
 
-        public DateTime? ToDate { get; set; }
+        public string? ToDate { get; set; }
 
         public int? PartyId { get; set; }
     }

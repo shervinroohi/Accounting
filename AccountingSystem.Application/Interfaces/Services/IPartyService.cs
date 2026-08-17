@@ -11,8 +11,7 @@ namespace AccountingSystem.Application.Interfaces.Services
     public interface IPartyService
     {
         Task<PagedResultDto<PartyResponseDto>> GetAllAsync(
-            int? pageNumber,
-            int? pageSize);
+            PaginationRequestDto pagination);
 
         Task<int> CreateAsync(CreatePartyDto dto);
 

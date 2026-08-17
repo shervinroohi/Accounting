@@ -17,6 +17,8 @@ namespace AccountingSystem.Application.Interfaces.Repositories.PatyRespository
             int? pageNumber,
             int? pageSize);
 
+        Task<Party?> GetByIdForUserAsync(int partyId, int userId);
+
         Task AddAsync(Party party);
 
         void Update(Party party);
