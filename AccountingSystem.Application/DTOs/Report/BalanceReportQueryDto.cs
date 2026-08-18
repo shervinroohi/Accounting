@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace AccountingSystem.Application.DTOs.Report
 {
-    public class BalanceReportRequestDto
+    public class BalanceReportQueryDto
     {
-        public string? FromDate { get; set; }
+        public DateTime? FromDate { get; set; }
 
-        public string? ToDate { get; set; }
+        public DateTime? ToDate { get; set; }
     }
+
 }

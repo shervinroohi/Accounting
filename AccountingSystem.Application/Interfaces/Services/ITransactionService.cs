@@ -12,8 +12,7 @@ namespace AccountingSystem.Application.Interfaces.Services
     {
 
         Task<PagedResultDto<TransactionResponseDto>> GetAllAsync(
-            int? pageNumber,
-            int? pageSize);
+            PaginationRequestDto dto);
 
         Task<int> CreateAsync(CreateTransactionRequestDto request);
 

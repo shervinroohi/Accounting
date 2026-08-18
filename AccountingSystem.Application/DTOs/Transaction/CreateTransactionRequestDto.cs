@@ -18,7 +18,7 @@ namespace AccountingSystem.Application.DTOs.Transaction
         public TransactionStatus Status { get; set; }
 
 
-        public DateTime TransactionDate { get; set; }
+        public string? TransactionDate { get; set; }
 
         public string? Description { get; set; }
 

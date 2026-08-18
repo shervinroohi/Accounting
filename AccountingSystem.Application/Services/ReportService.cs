@@ -66,8 +66,8 @@ namespace AccountingSystem.Application.Services
         //    };
         //}
         public async Task<PagedResultDto<TransactionResponseDto>> ReportAsync(
-    TransactionReportFilterDto filter,
-    PaginationRequestDto pagination)
+        TransactionReportFilterDto filter,
+        PaginationRequestDto pagination)
         {
             await _validatorService.ValidateAsync(filter);
             await _validatorService.ValidateAsync(pagination);
@@ -101,14 +101,19 @@ namespace AccountingSystem.Application.Services
             };
         }
 
-        public async Task<BalanceReportResponseDto> GetBalanceAsync(BalanceReportRequestDto request)
+        public async Task<BalanceReportResponseDto> GetBalanceAsync(
+            BalanceReportRequestDto request)
         {
+            await _validatorService.ValidateAsync(request);
+
+            var query = request.ToQuery();
+
             var userId = _currentUserService.UserId;
 
             return await _transactionReportRepository.GetBalanceAsync(
                 userId,
-                request.FromDate,
-                request.ToDate);
+                query.FromDate,
+                query.ToDate);
         }
     }
 }

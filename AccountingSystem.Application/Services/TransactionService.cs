@@ -62,15 +62,15 @@ namespace AccountingSystem.Application.Services
 
 
         public async Task<PagedResultDto<TransactionResponseDto>> GetAllAsync(
-            int? pageNumber,
-            int? pageSize)
+            PaginationRequestDto dto)
         {
+            await _validationService.ValidateAsync(dto);
             var userId = _currentUserService.UserId;
 
             var result = await _transactionRepository.GetAllAsync(
                 userId,
-                pageNumber,
-                pageSize);
+                dto.PageNumber,
+                dto.PageSize);
 
             var items = result.Items
                 .Select(x => x.ToDto())
@@ -79,18 +79,19 @@ namespace AccountingSystem.Application.Services
             return new PagedResultDto<TransactionResponseDto>
             {
                 Items = items,
-                PageNumber = pageNumber ?? 0,
-                PageSize = pageSize ?? 0,
+                PageNumber = dto.PageNumber ?? 0,
+                PageSize = dto.PageSize ?? 0,
                 TotalCount = result.TotalCount,
-                TotalPages = pageNumber.HasValue && pageSize.HasValue
+                TotalPages = dto.PageNumber.HasValue && dto.PageSize.HasValue
                     ? (int)Math.Ceiling(
-                        result.TotalCount / (double)pageSize.Value)
+                        result.TotalCount / (double)dto.PageSize.Value)
                     : 1
             };
         }
        
         public async Task ChangeStatusAsync(int id, ChangeTransactionStatusRequestDto request)
         {
+            await _validationService.ValidateAsync(request);
             var userId = _currentUserService.UserId;
 
             var transaction = await _transactionRepository.GetByIdAsync(id, userId);

@@ -9,26 +9,70 @@ using System.Threading.Tasks;
 
 namespace AccountingSystem.Application.Mappings
 {
-    public static class TransactionMapping
+    //public static class TransactionMapping
+    //{
+    //    public static Transaction ToEntity(this CreateTransactionRequestDto request)
+    //    {
+
+
+    //        return new Transaction
+    //        {
+    //            Amount = request.Amount,
+    //            Type = request.Type,
+    //            Status = request.Status,
+    //            Description = request.Description,
+    //            PartyId = request.PartyId,
+
+
+    //            TransactionDate=request.TransactionDate,
+    //        };
+    //    }
+
+    //    public static TransactionResponseDto ToDto(this Transaction transaction)
+    //    {
+    //        return new TransactionResponseDto
+    //        {
+    //            Id = transaction.Id,
+    //            Amount = transaction.Amount,
+    //            Type = transaction.Type,
+    //            Status = transaction.Status,
+    //            TransactionDate = transaction.TransactionDate,
+    //            Description = transaction.Description,
+    //            PartyId = transaction.PartyId,
+    //            PartyName = transaction.Party.Name
+    //        };
+    //    }
+    //}
+    public static class TransactionMapper
     {
-        public static Transaction ToEntity(this CreateTransactionRequestDto request)
+        private static readonly string[] AllowedDateFormats =
         {
+            "yyyy-MM-dd",
+            "yyyy-MM-ddTHH:mm:ss"
+        };
 
-
+        // Request DTO → Entity
+        public static Transaction ToEntity(
+            this CreateTransactionRequestDto dto)
+        {
             return new Transaction
             {
-                Amount = request.Amount,
-                Type = request.Type,
-                Status = request.Status,
-                Description = request.Description,
-                PartyId = request.PartyId,
-
-
-                TransactionDate=request.TransactionDate,
+                Amount = dto.Amount,
+                Type = dto.Type,
+                Status = dto.Status,
+                TransactionDate = DateTime.ParseExact(
+                    dto.TransactionDate!,
+                    AllowedDateFormats,
+                    CultureInfo.InvariantCulture,
+                    DateTimeStyles.None),
+                Description = dto.Description,
+                PartyId = dto.PartyId
             };
         }
 
-        public static TransactionResponseDto ToDto(this Transaction transaction)
+        // Entity → Response DTO
+        public static TransactionResponseDto ToDto(
+            this Transaction transaction)
         {
             return new TransactionResponseDto
             {
@@ -38,8 +82,7 @@ namespace AccountingSystem.Application.Mappings
                 Status = transaction.Status,
                 TransactionDate = transaction.TransactionDate,
                 Description = transaction.Description,
-                PartyId = transaction.PartyId,
-                PartyName = transaction.Party.Name
+                PartyId = transaction.PartyId
             };
         }
     }

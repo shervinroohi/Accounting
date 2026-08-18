@@ -1,4 +1,5 @@
-﻿using AccountingSystem.Application.DTOs.Transaction;
+﻿using AccountingSystem.Application.DTOs.General;
+using AccountingSystem.Application.DTOs.Transaction;
 using AccountingSystem.Application.Interfaces.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -32,12 +33,10 @@ public class TransactionsController:ControllerBase
 
     [HttpGet]
     public async Task<IActionResult> GetAll(
-        int? pageNumber,
-        int? pageSize)
+       [FromQuery] PaginationRequestDto dto)
     {
         var result = await _transactionService.GetAllAsync(
-            pageNumber,
-            pageSize);
+            dto);
 
         return Ok(result);
     }
